@@ -11,10 +11,12 @@ LABEL Project="Expense" \
 # Create user safely (non-interactive)
 RUN adduser -D backend
 
+ENV DB_HOST="mysql"
+
 WORKDIR /app/backend
 
 # Copy app files
-COPY ./code/index.js .
+COPY ./code/* /app/backend/
 
 # Set ownership (important when using non-root user)
 RUN chown -R backend:backend /app/backend
