@@ -8,7 +8,7 @@ LABEL Project="Expense" \
 RUN rm -rf /usr/share/nginx/html/*
 COPY ./code/index.html /usr/share/nginx/html/index.html
 
-# Fix ALL required permissions
+# Give ownership of the necessary directories to the nginx user
 RUN chown -R nginx:nginx /var/cache/nginx \
     && chown -R nginx:nginx /var/run \
     && chown -R nginx:nginx /run \
