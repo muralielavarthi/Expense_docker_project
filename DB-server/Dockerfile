@@ -11,7 +11,7 @@ RUN chown -R mysql:mysql /var/lib/mysql \
 
 ENV MYSQL_ROOT_PASSWORD=ExpenseApp@1
 
-COPY backend.sql /docker-entrypoint-initdb.d/
+COPY ./schema/backend.sql /docker-entrypoint-initdb.d/
 
 # non-root user to run mysql
 # mysql image already has a non-root user named 'mysql' with UID 101
