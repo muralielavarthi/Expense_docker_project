@@ -1,21 +1,23 @@
 FROM nginx:alpine
 
+# Install envsubst
+RUN apk add --no-cache gettext
+
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Remove default config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy config and frontend
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy files
+COPY nginx.conf /etc/nginx/nginx.conf.template
 COPY index.html /usr/share/nginx/html/index.html
 
 # Fix permissions
-RUN chown -R appuser:appgroup /usr/share/nginx/html \
-    && chown -R appuser:appgroup /var/cache/nginx \
-    && chown -R appuser:appgroup /var/run \
-    && chown -R appuser:appgroup /etc/nginx
+RUN chown -R appuser:appgroup /usr/share/nginx \
+    /var/cache/nginx /var/run /etc/nginx
 
 USER appuser
 
-EXPOSE 8080
+# Replace ENV variables at runtime
+CMD /bin/sh -c "envsubst '\$NGINX_PORT \$BACKEND_PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"

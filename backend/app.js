@@ -6,14 +6,18 @@ const app = express();
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  host: "mysql",
+  host: process.env.MYSQL_HOST,
   user: "root",
-  password: "root",
-  database: "calcdb",
+  password: process.env.MYSQL_ROOT_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT,
 });
 
 db.connect((err) => {
-  if (err) throw err;
+  if (err) {
+    console.error("DB connection failed:", err);
+    process.exit(1);
+  }
   console.log("MySQL Connected...");
 });
 
@@ -27,4 +31,5 @@ app.post("/add", (req, res) => {
   res.json({ result });
 });
 
-app.listen(3000, () => console.log("Backend running on port 3000"));
+const PORT = process.env.BACKEND_PORT || 3000;
+app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
