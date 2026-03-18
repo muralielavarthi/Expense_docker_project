@@ -31,5 +31,5 @@ app.post("/add", (req, res) => {
   res.json({ result });
 });
 
-const PORT = process.env.BACKEND_PORT || 3000;
+const PORT = process.env.BACKEND_PORT || 8080;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
